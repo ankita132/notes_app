@@ -16,7 +16,7 @@
 
 	    $email = mysqli_real_escape_string($con, $_POST['email']);
 	    $password = mysqli_real_escape_string($con, $_POST['password']);
-		  $checkBox = isset($_POST['keep']);
+	    $checkBox = isset($_POST['keep']);
 
 		if(email_exists($email,$con))
 		{
@@ -31,6 +31,7 @@
 			{
 				$res = mysqli_query($con, "SELECT * FROM usersinfo WHERE email='$email'");
 				$row = mysqli_fetch_array($res, MYSQLI_ASSOC);
+				//execution time exceeding problem
 				while(mysqli_num_rows($res) == 1){
 				$_SESSION['username'] = $row['username'];
 				$_SESSION['email'] = $email;
@@ -89,27 +90,29 @@
 	</nav>
 		<div id="error" style=" <?php  if($error !=""){ ?>  display:block; <?php } ?> "><?php echo $error; ?></div>
 		<form method="POST" action="login.php">
+		  
 		  <input id="input-1" type="text" placeholder="email@address.com" name="email" required autofocus />
 		  <label for="input-1">
 		    <span class="label-text">Email Id</span>
 		    <span class="nav-dot"></span>
 		    <div class="signup-button-trigger">Log In</div>
 		  </label>
+			
 		  <input id="input-2" type="password" placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;" name="password" required />
 		  <label for="input-2">
 		    <span class="label-text">Password</span>
 		    <span class="nav-dot"></span>
 		  </label>
+			
 		  <input id="input-3" type="checkbox" name="keep"/>
 		  <label for="input-3">
-						<span class="label-text" style=" text-align:center;">Keep me logged in</span>
+		  <span class="label-text" style=" text-align:center;">Keep me logged in</span>
 		  <span class="nav-dot"></span>
 		  </label>
+			
 		  <button type="submit" name="submit">Log In</button>
 		  <p class="tip">Press Tab</p>
 		  <div class="signup-button">Log In</div>
 		</form>
-
 	</body>
-
 </html>
