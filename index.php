@@ -14,15 +14,12 @@
 	{
 		  $firstName = mysqli_real_escape_string($con, $_POST['fname']);
 		  $lastName = mysqli_real_escape_string($con, $_POST['lname']);
-	    $email = mysqli_real_escape_string($con, $_POST['email']);
-			$userName = mysqli_real_escape_string($con, $_POST['username']);
-	    $password = $_POST['password'];
-	    $passwordConfirm = $_POST['passwordConfirm'];
-
+	   	  $email = mysqli_real_escape_string($con, $_POST['email']);
+		  $userName = mysqli_real_escape_string($con, $_POST['username']);
+	          $password = $_POST['password'];
+	          $passwordConfirm = $_POST['passwordConfirm'];
 		  $conditions = isset($_POST['conditions']);
-
 		  $date = date("F, d Y");
-
 
 		if(strlen($firstName) < 3)
 		{
