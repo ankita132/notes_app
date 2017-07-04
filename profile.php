@@ -3,7 +3,7 @@
 	include("connect.php");
 	include("functions.php");
 
- $name = $_SESSION['username'];
+        $name = $_SESSION['username'];
 
 	if(isset($_POST['submit'])){
 		 $note = mysqli_real_escape_string($con, $_POST['note']);
@@ -11,11 +11,11 @@
 
 		 if(mysqli_query($con, $insertQuery))
 		 {
-		 		$error = "Note added";
+		 	$error = "Note added";
 		 }
 		 else
 		 {
-		 $error = "Cannot add note!!";
+		 	$error = "Cannot add note!!";
 		 }
 	}
 
@@ -59,7 +59,7 @@
 	  <div class="box header">
 	    <img src="pro.jpg" alt="" />
 	    <h2><?php echo $_SESSION['firstname']." ".$_SESSION['lastname']; ?></h2>
-	    <h4><?php echo  "@".$_SESSION['username'];?></h4>
+	    <h4><?php echo  "@".$_SESSION['username']; ?></h4>
 	  </div>
 	  <div class="box footer">
 	   <form method="POST" action="profile.php">
