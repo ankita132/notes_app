@@ -1,5 +1,5 @@
 <?php
-
+	error_reporting(0);
 	include("connect.php");
 	include("functions.php");
 
@@ -90,26 +90,26 @@
 	</nav>
 		<div id="error" style=" <?php  if($error !=""){ ?>  display:block; <?php } ?> "><?php echo $error; ?></div>
 		<form method="POST" action="login.php">
-		  
+
 		  <input id="input-1" type="text" placeholder="email@address.com" name="email" required autofocus />
 		  <label for="input-1">
 		    <span class="label-text">Email Id</span>
 		    <span class="nav-dot"></span>
 		    <div class="signup-button-trigger">Log In</div>
 		  </label>
-			
+
 		  <input id="input-2" type="password" placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;" name="password" required />
 		  <label for="input-2">
 		    <span class="label-text">Password</span>
 		    <span class="nav-dot"></span>
 		  </label>
-			
+
 		  <input id="input-3" type="checkbox" name="keep"/>
 		  <label for="input-3">
 		  <span class="label-text" style=" text-align:center;">Keep me logged in</span>
 		  <span class="nav-dot"></span>
 		  </label>
-			
+
 		  <button type="submit" name="submit">Log In</button>
 		  <p class="tip">Press Tab</p>
 		  <div class="signup-button">Log In</div>

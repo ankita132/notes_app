@@ -1,4 +1,5 @@
 <?php
+	error_reporting(0);
 	include("connect.php");
 	include("functions.php");
 
@@ -16,8 +17,8 @@
 		  $lastName = mysqli_real_escape_string($con, $_POST['lname']);
 	   	  $email = mysqli_real_escape_string($con, $_POST['email']);
 		  $userName = mysqli_real_escape_string($con, $_POST['username']);
-	          $password = $_POST['password'];
-	          $passwordConfirm = $_POST['passwordConfirm'];
+	      $password = $_POST['password'];
+	      $passwordConfirm = $_POST['passwordConfirm'];
 		  $conditions = isset($_POST['conditions']);
 		  $date = date("F, d Y");
 
@@ -74,6 +75,35 @@
 
 <!doctype html>
 <html>
+<script language="JavaScript">
+
+ function getKey(e)
+      {
+        if (window.event)
+           return window.event.keyCode;
+        else if (e)
+           return e.which;
+        else
+           return null;
+      }
+
+ function restrictChars(e, obj)
+      {
+        var validList = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        var key, keyChar;
+        key = getKey(e);
+        if (key == null)
+        	return true;
+        if ( key==0 || key==8 || key==9 || key==13 || key==27 )
+           return true;
+        keyChar = String.fromCharCode(key);
+
+        if (validList.indexOf(keyChar) != -1)
+                return true;
+        return false;
+      }
+</script>
+
 	<head>
 	<title>Notes App- Register</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -102,13 +132,13 @@
 
 		<div id="error" style=" <?php  if($error !=""){ ?>  display:block; <?php } ?> "><?php echo $error; ?></div>
 		<form method="POST" action="index.php">
-	   <input id="input-1" type="text" placeholder="At least 3 characters" name="fname" required autofocus />
+	   <input id="input-1" type="text" placeholder="At least 3 characters" name="fname" onKeyPress="return restrictChars(event, this)" required autofocus />
 	  <label for="input-1">
 	    <span class="label-text">First name</span>
 	    <span class="nav-dot"></span>
 	    <div class="signup-button-trigger">Sign Up</div>
 	  </label>
-	  <input id="input-2" type="text" placeholder="At least 3 characters" name="lname" required />
+	  <input id="input-2" type="text" placeholder="At least 3 characters" name="lname" onKeyPress="return restrictChars(event, this)" required />
 	  <label for="input-2">
 	    <span class="label-text">Last Name</span>
 	    <span class="nav-dot"></span>
