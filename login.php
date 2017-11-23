@@ -32,7 +32,7 @@
 				$res = mysqli_query($con, "SELECT * FROM usersinfo WHERE email='$email'");
 				$row = mysqli_fetch_array($res, MYSQLI_ASSOC);
 				//execution time exceeding problem
-				while(mysqli_num_rows($res) == 1){
+				if(mysqli_num_rows($res) == 1){
 				$_SESSION['username'] = $row['username'];
 				$_SESSION['email'] = $email;
 				$_SESSION['firstname'] = $row['firstname'];
