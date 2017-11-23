@@ -3,6 +3,22 @@
 	include("connect.php");
 	include("functions.php");
 
+        $name = $_SESSION['username'];
+
+	if(isset($_POST['submit'])){
+		 $note = mysqli_real_escape_string($con, $_POST['note']);
+		 $insertQuery = "INSERT INTO notes(note, name) VALUES ('$note', '$name')";
+
+		 if(mysqli_query($con, $insertQuery))
+		 {
+		 	$error = "Note added";
+		 }
+		 else
+		 {
+		 	$error = "Cannot add note!!";
+		 }
+	}
+
 	if(!logged_in())
 	{
 		header("location:login.php");
@@ -46,7 +62,7 @@
         $(document).on('click','#add-note',function(){
 			var note = $('#new-note').val();
 			var id  = $('#note-id').val();
-			
+
 			if(note!=''){
 				if(id!=''){
 					$.ajax({
@@ -156,7 +172,7 @@ while($Row = mysqli_fetch_array($sqlresult)){
 		</div> ";
 	echo '<div class="action pull-right"><a id="edit_note"  onclick="edit(\''.$Row['id'].'\')"><i class="fa fa-edit"></i></a>';
 	echo '<a id="remove_note" onclick="remove(\''.$Row['id'].'\')"><i class="fa fa-trash-o"></i></a></div></div>';
-	
+
 }
  ?>
 				</div>

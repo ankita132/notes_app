@@ -20,7 +20,7 @@
 	      $password = $_POST['password'];
 	      $passwordConfirm = $_POST['passwordConfirm'];
 		  $conditions = isset($_POST['conditions']);
-		  $date = date("F, d Y");
+		  $date = date("Y-m-d");
 
 		if(strlen($firstName) < 3)
 		{
@@ -54,7 +54,7 @@
 
 		else if(!$conditions)
 		{
-			$error = "You must be agree with the terms and conditions";
+			$error = "You must agree with the terms and conditions";
 		}
 
 		else

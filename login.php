@@ -37,7 +37,7 @@
 				$_SESSION['email'] = $email;
 				$_SESSION['firstname'] = $row['firstname'];
 				$_SESSION['lastname'] = $row['lastname'];
-			}
+				}
 				if($checkBox == "on")
 				{
 					setcookie("email",$email, time()+3600);
