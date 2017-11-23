@@ -3,22 +3,6 @@
 	include("connect.php");
 	include("functions.php");
 
-        $name = $_SESSION['username'];
-
-	if(isset($_POST['submit'])){
-		 $note = mysqli_real_escape_string($con, $_POST['note']);
-		 $insertQuery = "INSERT INTO notes(note, name) VALUES ('$note', '$name')";
-
-		 if(mysqli_query($con, $insertQuery))
-		 {
-		 	$error = "Note added";
-		 }
-		 else
-		 {
-		 	$error = "Cannot add note!!";
-		 }
-	}
-
 	if(!logged_in())
 	{
 		header("location:login.php");
@@ -37,6 +21,63 @@
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<script>
+	function remove(id){
+		$.ajax({
+			type:'GET',
+			url : 'remove.php',
+			data :{'id':id},
+			success : function(data){
+				$("#show-notes").html(data);
+			}
+		});
+	}
+	function edit(id){
+		$.ajax({
+			type:'GET',
+			url : 'edit.php',
+			data :{'id':id},
+			success : function(data){
+				$("#add-edit").html(data);
+			}
+		});
+	}
+	$(document).ready(function(){
+        $(document).on('click','#add-note',function(){
+			var note = $('#new-note').val();
+			var id  = $('#note-id').val();
+			
+			if(note!=''){
+				if(id!=''){
+					$.ajax({
+						type:'POST',
+						url : 'add.php',
+						data :{'note':note,'id':id},
+						success : function(data){
+							$("#show-notes").html(data);
+						}
+					});
+				}
+				else{
+					$.ajax({
+						type:'POST',
+						url : 'add.php',
+						data :{'note':note},
+						success : function(data){
+							$("#show-notes").html(data);
+						}
+					});
+				}
+			}
+			else{
+				window.alert("Seems like you are trying to add an EMPTY note !!!!!!");
+			}
+			$("#new-note").val('');
+			$("#note-id").val('');
+			$("#add-note").val('add-note');
+		});
+	});
+	</script>
 </head>
 <body>
 
@@ -54,22 +95,25 @@
     </ul>
   </div>
 </nav>
-		<div class="window">
+	<div class="window">
 	  <div class="overlay"></div>
-	  <div class="box header">
-	    <img src="pro.jpg" alt="" />
-	    <h2><?php echo $_SESSION['firstname']." ".$_SESSION['lastname']; ?></h2>
-	    <h4><?php echo  "@".$_SESSION['username']; ?></h4>
-	  </div>
-	  <div class="box footer">
-	   <form method="POST" action="profile.php">
-			 <div class="wrap">
-  <input type="text" placeholder="Enter note here" name="note" class="add"><br/><br/>
-  <div class="bg"></div>
-			</div>
-	   <input type="submit"  class="btn"  name="submit" value="add-note" />
-	 </form>
-	  </div>
+	  	<div class="box header">
+	    	<img src="pro.jpg" alt="" />
+	    	<h2><?php echo $_SESSION['firstname']." ".$_SESSION['lastname']; ?></h2>
+	    	<h4><?php echo  "@".$_SESSION['username']; ?></h4>
+	  	</div>
+	  	<div class="box footer">
+	   		<!-- <form method="POST" action="add.php"> -->
+			<div id="add-edit">
+				<div class="wrap">
+  					<input id="new-note" type="text" placeholder="Enter note here" name="note" class="add"><br/><br/>
+  					<div class="bg"></div>
+				</div>
+				<input id="note-id" hidden value="">
+	   			<input id="add-note" type="submit"  class="btn"  name="submit" value="add-note" />
+	  		</div>
+	  		<!-- </form> -->
+	  	</div>
 	</div>
 
 	<div class="material-wrap">
@@ -99,6 +143,7 @@
 	<div class="tabs-content">
 		<div class="friend-list">
 			<div class="list-ul">
+				<div id="show-notes">
 <?php
 $name = $_SESSION['username'];
 $sqlresult = mysqli_query($con, "SELECT * FROM notes WHERE name='$name'");
@@ -109,9 +154,12 @@ while($Row = mysqli_fetch_array($sqlresult)){
 		<div class='info pull-left'>
 			<div class='name'>".$Row['note']."</div>
 		</div> ";
-	echo '<div class="action pull-right"><a id="remove_note" href="remove.php?id='.$Row['id'].'"><i class="fa fa-trash-o"></i></a></div></div>';
+	echo '<div class="action pull-right"><a id="edit_note"  onclick="edit(\''.$Row['id'].'\')"><i class="fa fa-edit"></i></a>';
+	echo '<a id="remove_note" onclick="remove(\''.$Row['id'].'\')"><i class="fa fa-trash-o"></i></a></div></div>';
+	
 }
  ?>
+				</div>
 			</div>
 		</div>
 	</div>
