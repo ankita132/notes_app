@@ -22,6 +22,24 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 	<script>
+	$(document).ready(function() {
+		  var len = 0;
+		  var maxchar = 255;
+	$( "#remainingC" ).html( "Remaining characters: " +"255" );
+		  $( '#new-note' ).keyup(function(){
+		    len = this.value.length
+		    if(len > maxchar){
+		        return false;
+		    }
+		    else if (len > 0) {
+		        $( "#remainingC" ).html( "Remaining characters: " +( maxchar - len ) );
+		    }
+		    else {
+		        $( "#remainingC" ).html( "Remaining characters: " +( maxchar ) );
+		    }
+		  })
+});
+
 	function remove(id){
 		$.ajax({
 			type:'GET',
@@ -46,7 +64,7 @@
         $(document).on('click','#add-note',function(){
 			var note = $('#new-note').val();
 			var id  = $('#note-id').val();
-			
+
 			if(note!=''){
 				if(id!=''){
 					$.ajax({
@@ -106,7 +124,8 @@
 	   		<!-- <form method="POST" action="add.php"> -->
 			<div id="add-edit">
 				<div class="wrap">
-  					<input id="new-note" type="text" placeholder="Enter note here" name="note" class="add"><br/><br/>
+  					<input id="new-note" type="text" placeholder="Enter note here.." name="note" class="add" maxlength="255" ><span id='remainingC'></span>
+  					<br/><br/>
   					<div class="bg"></div>
 				</div>
 				<input id="note-id" hidden value="">
@@ -156,7 +175,7 @@ while($Row = mysqli_fetch_array($sqlresult)){
 		</div> ";
 	echo '<div class="action pull-right"><a id="edit_note"  onclick="edit(\''.$Row['id'].'\')"><i class="fa fa-edit"></i></a>';
 	echo '<a id="remove_note" onclick="remove(\''.$Row['id'].'\')"><i class="fa fa-trash-o"></i></a></div></div>';
-	
+
 }
  ?>
 				</div>

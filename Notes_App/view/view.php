@@ -1,76 +1,5 @@
 <?php
-	error_reporting(0);
-	include("connect.php");
-	include("functions.php");
-
-	if(logged_in())
-	{
-		header("location:profile.php");
-		exit();
-	}
-
-	$error = "";
-
-	if(isset($_POST['submit']))
-	{
-		  $firstName = mysqli_real_escape_string($con, $_POST['fname']);
-		  $lastName = mysqli_real_escape_string($con, $_POST['lname']);
-	   	  $email = mysqli_real_escape_string($con, $_POST['email']);
-		  $userName = mysqli_real_escape_string($con, $_POST['username']);
-	      $password = $_POST['password'];
-	      $passwordConfirm = $_POST['passwordConfirm'];
-		  $conditions = isset($_POST['conditions']);
-		  $date = date("Y-m-d");
-
-		if(strlen($firstName) < 3)
-		{
-			$error = "First name is too short";
-		}
-
-		else if(strlen($lastName) < 3)
-		{
-			$error = "Last name is too short";
-		}
-
-		else if(!filter_var($email, FILTER_VALIDATE_EMAIL))
-		{
-			$error = "Please enter valid email address";
-		}
-
-		else if(email_exists($email, $con))
-		{
-			$error = "Someone is already registered with this email";
-		}
-
-		else if(strlen($password) < 8)
-		{
-			$error = "Password must be greater than 8 characters";
-		}
-
-		else if($password !== $passwordConfirm)
-		{
-			$error = "Password does not match";
-		}
-
-		else if(!$conditions)
-		{
-			$error = "You must agree with the terms and conditions";
-		}
-
-		else
-		{
-				$password = password_hash($password, PASSWORD_DEFAULT);
-				$insertQuery = "INSERT INTO usersinfo(firstName, lastName, userName, email, password, date) VALUES ('$firstName','$lastName','$userName','$email','$password','$date')";
-					if(mysqli_query($con, $insertQuery))
-					{
-							$error = "You are successfully registered";
-					}
-				else
-				{
-					$error = "Problem in registration";
-				}
-		}
-	}
+include('../controller/controller.php');
 ?>
 
 <!doctype html>
@@ -124,14 +53,14 @@
 		<li><a href="#" style="font-size:15pt;"> Notes-App</a></li>
 		</ul>
 		<ul class="nav navbar-nav navbar-right">
-			<li><a href="index.php"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+			<li><a href="view.php"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
 			<li><a href="login.php"><span class="glyphicon glyphicon-log-in"></span> Log In</a></li>
 		</ul>
 		</div>
 	</nav>
 
 		<div id="error" style=" <?php  if($error !=""){ ?>  display:block; <?php } ?> "><?php echo $error; ?></div>
-		<form method="POST" action="index.php">
+		<form method="POST" action="view.php">
 	   <input id="input-1" type="text" placeholder="At least 3 characters" name="fname" onKeyPress="return restrictChars(event, this)" required autofocus />
 	  <label for="input-1">
 	    <span class="label-text">First name</span>
@@ -153,12 +82,12 @@
 	    <span class="label-text">Email</span>
 	    <span class="nav-dot"></span>
 	  </label>
-	  <input id="input-5" type="text" placeholder="At least 8 characters" name="password" required />
+	  <input id="input-5" type="password" placeholder="At least 8 characters" name="password" required />
 	  <label for="input-5">
 	    <span class="label-text">Password</span>
 	    <span class="nav-dot"></span>
 	  </label>
-	  <input id="input-6" type="text" placeholder="At least 8 characters" name="passwordConfirm" required />
+	  <input id="input-6" type="password" placeholder="At least 8 characters" name="passwordConfirm" required />
 	  <label for="input-6">
 	    <span class="label-text">Confirm Password</span>
 	    <span class="nav-dot"></span>

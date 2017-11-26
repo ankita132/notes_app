@@ -153,12 +153,12 @@
 	    <span class="label-text">Email</span>
 	    <span class="nav-dot"></span>
 	  </label>
-	  <input id="input-5" type="text" placeholder="At least 8 characters" name="password" required />
+	  <input id="input-5" type="password" placeholder="At least 8 characters" name="password" required />
 	  <label for="input-5">
 	    <span class="label-text">Password</span>
 	    <span class="nav-dot"></span>
 	  </label>
-	  <input id="input-6" type="text" placeholder="At least 8 characters" name="passwordConfirm" required />
+	  <input id="input-6" type="password" placeholder="At least 8 characters" name="passwordConfirm" required />
 	  <label for="input-6">
 	    <span class="label-text">Confirm Password</span>
 	    <span class="nav-dot"></span>

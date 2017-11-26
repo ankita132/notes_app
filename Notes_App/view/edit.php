@@ -9,7 +9,7 @@ $res = mysqli_fetch_array($sqlresult);
 $note = $res['note'];
 
 echo '<div class="wrap">
-<input id="new-note" type="text" placeholder="Enter note here" name="note" class="add" value="'.$note.'"><br/><br/>
+<input id="new-note" type="text" placeholder="Enter note here" name="note" class="add" maxlength="255" value="'.$note.'"><br/><br/>
 <div class="bg"></div>
 </div>
 <input id="note-id" hidden value="'.$id.'">
