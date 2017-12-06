@@ -3,7 +3,7 @@ class connection
 {
 	public function connect()
 	{
-		$con = new mysqli('localhost','root','','registration');
+		$con = new mysqli('localhost','notes_app','notes_app@123','registration');
 		return $con;
 	}
 
