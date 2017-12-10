@@ -60,6 +60,24 @@
 			}
 		});
 	}
+
+	function mySearch(){
+		$text = $('#search-box').val();
+		if($text!='')
+		{
+			window.location.href = "profile.php?search=" + $text;
+			document.getElementById("search-box").innerHTML = "HEllo";
+
+		}
+		
+		else
+		window.location.href = "profile.php"
+	}
+
+	function resetSearch(){
+		window.location.href = "profile.php"
+	}
+
 	$(document).ready(function(){
         $(document).on('click','#add-note',function(){
 			var note = $('#new-note').val();
@@ -143,8 +161,9 @@
 		</div>
 		<span class="title">Notes</span>
 		<div class="pull-right">
-			<a href="#" class="search-tgl pull-left"><i class="fa fa-search"></i></a>
-			<a href="#" class="option-tgl pull-left"><i class="fa fa-ellipsis-v"></i></a>
+			<input type="text" placeholder="Search Notes..." class="col-md-8" id="search-box">
+			<a href="#" class="search-tgl" onclick="mySearch()"><i class="fa fa-search"></i></a>
+			<a href="#" onclick="resetSearch()" class="option-tgl"><i class="fa fa-refresh"></i></a>
 		</div>
 	</div>
 	<div class="profile">
@@ -165,7 +184,15 @@
 				<div id="show-notes">
 <?php
 $name = $_SESSION['username'];
+
+$text = isset($_GET['search'])? $_GET['search'] : '';
+
+if($text == '')
 $sqlresult = mysqli_query($con, "SELECT * FROM notes WHERE name='$name'");
+
+else
+$sqlresult = mysqli_query($con, "SELECT * FROM notes WHERE name='$name' AND note LIKE '%$text%'");
+
 
 while($Row = mysqli_fetch_array($sqlresult)){
 	$id = $Row['id'];
