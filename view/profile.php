@@ -62,20 +62,30 @@
 	}
 
 	function mySearch(){
-		$text = $('#search-box').val();
-		if($text!='')
+		var text = $('#search-box').val();
+		if(text!='')
 		{
-			window.location.href = "profile.php?search=" + $text;
-			document.getElementById("search-box").innerHTML = "HEllo";
-
+			$.ajax({
+			type:'GET',
+			url : 'search.php',
+			data :{'search':text},
+			success : function(data){
+				$("#show-notes").html(data);
+			}
+		});
+		$("#search-box").val('');
 		}
-		
-		else
-		window.location.href = "profile.php"
 	}
 
 	function resetSearch(){
-		window.location.href = "profile.php"
+		$.ajax({
+			type:'GET',
+			url : 'search.php',
+			data :{},
+			success : function(data){
+				$("#show-notes").html(data);
+			}
+		});
 	}
 
 	$(document).ready(function(){
@@ -184,15 +194,7 @@
 				<div id="show-notes">
 <?php
 $name = $_SESSION['username'];
-
-$text = isset($_GET['search'])? $_GET['search'] : '';
-
-if($text == '')
 $sqlresult = mysqli_query($con, "SELECT * FROM notes WHERE name='$name'");
-
-else
-$sqlresult = mysqli_query($con, "SELECT * FROM notes WHERE name='$name' AND note LIKE '%$text%'");
-
 
 while($Row = mysqli_fetch_array($sqlresult)){
 	$id = $Row['id'];

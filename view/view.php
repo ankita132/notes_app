@@ -1,5 +1,11 @@
 <?php
 include('../controller/controller.php');
+
+if(logged_in())
+	{
+		header("location:profile.php");
+		exit();
+	}
 ?>
 
 <!doctype html>
@@ -40,7 +46,7 @@ include('../controller/controller.php');
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 	<link href='https://fonts.googleapis.com/css?family=Lato:300,400' rel='stylesheet' type='text/css'>
-	<link rel="stylesheet" type="text/css" href="index.css" />
+	<link rel="stylesheet" type="text/css" href="view.css" />
 	<link rel="icon" href="icon.png" />
 	</head>
 	<body>
@@ -50,7 +56,7 @@ include('../controller/controller.php');
 			<a class="navbar-brand" href="#"><img src="icon.png"  style="position:relative; top:-20%; width:25pt; height:25pt;"></a>
 		</div>
 		<ul class="nav navbar-nav navbar-left">
-		<li><a href="#" style="font-size:15pt;"> Notes-App</a></li>
+		<li><a href="profile.php" style="font-size:15pt;"> Notes-App</a></li>
 		</ul>
 		<ul class="nav navbar-nav navbar-right">
 			<li><a href="view.php"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>

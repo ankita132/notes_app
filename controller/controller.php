@@ -14,7 +14,8 @@ if(isset($_POST['submit']))
 		$password = $_POST['password'];
 		$passwordConfirm = $_POST['passwordConfirm'];
 		$conditions = isset($_POST['conditions']);
-		$date = date("Y-m-d");
+		$date = date('Y-m-d G:i:s');
+		
 
 		if(strlen($firstname) < 3)
 			{
