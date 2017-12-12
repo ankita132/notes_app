@@ -80,10 +80,10 @@
 			<a class="navbar-brand" href="#"><img src="icon.png"  style="position:relative; top:-20%; width:25pt; height:25pt;"></a>
 		</div>
 		<ul class="nav navbar-nav navbar-left">
-		<li><a href="#" style="font-size:15pt;"> Notes-App</a></li>
+		<li><a href="profile.php" style="font-size:15pt;"> Notes-App</a></li>
 		</ul>
 		<ul class="nav navbar-nav navbar-right">
-			<li><a href="index.php"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+			<li><a href="view.php"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
 			<li><a href="login.php"><span class="glyphicon glyphicon-log-in"></span> Log In</a></li>
 		</ul>
 		</div>

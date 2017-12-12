@@ -33,7 +33,7 @@ class model
 											{
 												$error = "Problem in registration";
 												echo $error;
-												header("Location: index.php");
+												header("Location: view.php");
 											}
 
 									mysqli_close($con_link);

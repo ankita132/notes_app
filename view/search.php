@@ -4,26 +4,15 @@ include("functions.php");
 if(!logged_in())("Location: login.php");
 
 $name = $_SESSION['username'];
+$text = isset($_GET['search'])? $_GET['search'] : '';
+if($text == '')
+$sqlresult = mysqli_query($con, "SELECT * FROM notes WHERE name='$name'")
+ or die ("Unable to query notes");
 
-if(isset($_POST['note'])){
+else
+$sqlresult = mysqli_query($con, "SELECT * FROM notes WHERE name='$name'
+ AND note LIKE '%$text%'")  or die ("Unable to query notes");
 
-    $note = mysqli_real_escape_string($con, $_POST['note']);
-    $insertQuery = "INSERT INTO notes(note, name) VALUES ('$note', '$name')";
-
-    if(isset($_POST['id'])){
-        $id = $_POST['id'];
-        $insertQuery = "UPDATE notes SET note ='$note' WHERE id = '$id'";
-    }
-    if(mysqli_query($con, $insertQuery))
-    {
-        $error = "Note added";
-    }
-    else
-    {
-        $error = "Cannot add note!!";
-    }
-}
-$sqlresult = mysqli_query($con, "SELECT * FROM notes WHERE name='$name'") or die ("Unable to query notes");
 
 while($Row = mysqli_fetch_array($sqlresult)){
 	$id = $Row['id'];

@@ -1,6 +1,7 @@
 <?php
 include ("connect.php");
 include("functions.php");
+if(!logged_in())("Location: login.php");
 
 $id = isset($_GET['id']) ? $_GET['id'] : '';
 
