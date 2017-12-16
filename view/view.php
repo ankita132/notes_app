@@ -2,44 +2,45 @@
 include('../controller/controller.php');
 
 if(logged_in())
-	{
-		header("location:profile.php");
-		exit();
-	}
+{
+	header("location:profile.php");
+	exit();
+}
 ?>
 
 <!doctype html>
 <html>
 <script language="JavaScript">
 
- function getKey(e)
-      {
-        if (window.event)
-           return window.event.keyCode;
-        else if (e)
-           return e.which;
-        else
-           return null;
-      }
+	function getKey(e)
+	{
+		if (window.event)
+			return window.event.keyCode;
+		else if (e)
+			return e.which;
+		else
+			return null;
+	}
 
- function restrictChars(e, obj)
-      {
-        var validList = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        var key, keyChar;
-        key = getKey(e);
-        if (key == null)
-        	return true;
-        if ( key==0 || key==8 || key==9 || key==13 || key==27 )
-           return true;
-        keyChar = String.fromCharCode(key);
+	function restrictChars(e, obj)
+	{
+		var validList = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+		var key, keyChar;
+		key = getKey(e);
+		if (key == null)
+			return true;
+		if ( key==0 || key==8 || key==9 || key==13 || key==27 )
+			return true;
+		keyChar = String.fromCharCode(key);
 
-        if (validList.indexOf(keyChar) != -1)
-                return true;
-        return false;
-      }
+		if (validList.indexOf(keyChar) != -1)
+			return true;
+		return false;
+	}
+
+	
 </script>
-
-	<head>
+<head>
 	<title>Notes App- Register</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -48,64 +49,103 @@ if(logged_in())
 	<link href='https://fonts.googleapis.com/css?family=Lato:300,400' rel='stylesheet' type='text/css'>
 	<link rel="stylesheet" type="text/css" href="view.css" />
 	<link rel="icon" href="icon.png" />
-	</head>
-	<body>
-		<nav class="navbar navbar-inverse">
+	<script>
+		$(document).ready(function(){
+			$('#images').on("change",function (event){
+				var form = document.querySelector('form');
+				var formdata =new FormData(form);
+				var file = event.target.files[0];
+				
+				if(!file.type.match('image/.*')){
+					window.alert( "Only Image formats are allowed.");
+					return;
+				}
+				if(file.size >= 2*1024*1024){
+					window.alert("Seems like you are trying to upload a very BIG file. ("+parseInt(file.size/1024/1024)+" mb)(File Limit : 2 mb)");
+					return;					
+				}
+
+				if (formdata) {	
+					$.ajax({
+						url: "upload.php",
+						type: "POST",
+						data: formdata,
+						processData: false,
+						contentType: false,
+						success: function (res) {
+					// document.getElementById("profile-image").innerHTML = res; 
+				}
+			});
+				}
+			});
+		});
+	</script>
+</head>
+<body>
+	<nav class="navbar navbar-inverse">
 		<div class="container-fluid">
-		<div class="navbar-header">
-			<a class="navbar-brand" href="#"><img src="icon.png"  style="position:relative; top:-20%; width:25pt; height:25pt;"></a>
-		</div>
-		<ul class="nav navbar-nav navbar-left">
-		<li><a href="profile.php" style="font-size:15pt;"> Notes-App</a></li>
-		</ul>
-		<ul class="nav navbar-nav navbar-right">
-			<li><a href="view.php"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
-			<li><a href="login.php"><span class="glyphicon glyphicon-log-in"></span> Log In</a></li>
-		</ul>
+			<div class="navbar-header">
+				<a class="navbar-brand" href="#"><img src="icon.png"  style="position:relative; top:-20%; width:25pt; height:25pt;"></a>
+			</div>
+			<ul class="nav navbar-nav navbar-left">
+				<li><a href="profile.php" style="font-size:15pt;"> Notes-App</a></li>
+			</ul>
+			<ul class="nav navbar-nav navbar-right">
+				<li><a href="view.php"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+				<li><a href="login.php"><span class="glyphicon glyphicon-log-in"></span> Log In</a></li>
+			</ul>
 		</div>
 	</nav>
 
-		<div id="error" style=" <?php  if($error !=""){ ?>  display:block; <?php } ?> "><?php echo $error; ?></div>
-		<form method="POST" action="view.php">
-	   <input id="input-1" type="text" placeholder="At least 3 characters" name="fname" onKeyPress="return restrictChars(event, this)" required autofocus />
-	  <label for="input-1">
-	    <span class="label-text">First name</span>
-	    <span class="nav-dot"></span>
-	    <div class="signup-button-trigger">Sign Up</div>
-	  </label>
-	  <input id="input-2" type="text" placeholder="At least 3 characters" name="lname" onKeyPress="return restrictChars(event, this)" required />
-	  <label for="input-2">
-	    <span class="label-text">Last Name</span>
-	    <span class="nav-dot"></span>
-	  </label>
-	  <input id="input-3" type="text" placeholder="crazy32" name="username" required />
-	  <label for="input-3">
-	    <span class="label-text">Username</span>
-	    <span class="nav-dot"></span>
-	  </label>
-	  <input id="input-4" type="email" placeholder="email@address.com" name="email" required />
-	  <label for="input-4">
-	    <span class="label-text">Email</span>
-	    <span class="nav-dot"></span>
-	  </label>
-	  <input id="input-5" type="password" placeholder="At least 8 characters" name="password" required />
-	  <label for="input-5">
-	    <span class="label-text">Password</span>
-	    <span class="nav-dot"></span>
-	  </label>
-	  <input id="input-6" type="password" placeholder="At least 8 characters" name="passwordConfirm" required />
-	  <label for="input-6">
-	    <span class="label-text">Confirm Password</span>
-	    <span class="nav-dot"></span>
-	  </label>
-	  <input id="input-7" type="checkbox" name="conditions"/>
-	  <label for="input-7">
-	    <span class="label-text" style="text-align:center;">I agree to the terms and conditions</span>
-	    <span class="nav-dot"></span>
-	  </label>
-	  <button type="submit" name="submit">Create Your Account</button>
-	  <p class="tip">Press Tab</p>
-	  <div class="signup-button">Sign Up</div>
+	<div id="error" style=" <?php  if($error !=""){ ?>  display:block; <?php } ?> "><?php echo $error; ?></div>
+	<form method="POST" action="view.php">
+
+		<input id="input-1" type="text" placeholder="At least 3 characters" name="fname" onKeyPress="return restrictChars(event, this)" required autofocus />
+		<label for="input-1">
+			<span class="label-text">First name</span>
+			<span class="nav-dot"></span>
+			<div class="signup-button-trigger">Sign Up</div>
+		</label>
+
+		<input id="input-2" type="text" placeholder="At least 3 characters" name="lname" onKeyPress="return restrictChars(event, this)" required />
+		<label for="input-2">
+			<span class="label-text">Last Name</span>
+			<span class="nav-dot"></span>
+		</label>
+		<input id="input-3" type="text" placeholder="crazy32" name="username" required />
+		<label for="input-3">
+			<span class="label-text">Username</span>
+			<span class="nav-dot"></span>
+		</label>
+		<input id="images" type="file" name="images" />
+		<label for="images">
+			<span class="label-text">Upload Profile Image</span>
+			<span class="nav-dot"></span>
+		</label>
+		<input id="input-4" type="email" placeholder="email@address.com" name="email" required />
+		<label for="input-4">
+			<span class="label-text">Email</span>
+			<span class="nav-dot"></span>
+		</label>
+		<input id="input-5" type="password" placeholder="At least 8 characters" name="password" required />
+		<label for="input-5">
+			<span class="label-text">Password</span>
+			<span class="nav-dot"></span>
+		</label>
+		<input id="input-6" type="password" placeholder="At least 8 characters" name="passwordConfirm" required />
+		<label for="input-6">
+			<span class="label-text">Confirm Password</span>
+			<span class="nav-dot"></span>
+		</label>
+		
+		<input id="input-7" type="checkbox" name="conditions"/>
+		<label for="input-7">
+			<span class="label-text" style="text-align:center;">I agree to the terms and conditions</span>
+			<span class="nav-dot"></span>
+		</label>
+		<button type="submit" name="submit">Create Your Account</button>
+		<p class="tip">Press Tab</p>
+		<div class="signup-button">Sign Up</div>
 	</form>
-		</body>
+</body>
 </html>
