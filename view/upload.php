@@ -13,6 +13,9 @@ if(!logged_in())("Location: login.php");
     $success =[];
     $error = [];
 
+    if(!is_dir("img")) {
+        mkdir('img'); 
+    }
     $filesearch = (isset($_POST['username']))?$_POST['username']:'';
 
     if(isset($_SESSION['username']))$filesearch = $_SESSION['username'];
@@ -75,18 +78,20 @@ if(!logged_in())("Location: login.php");
         
         $filename = $username. time(). '.' .$ext;
         $temp_filename= '';
+        
         if(in_array($ext, $allowed) == true){
-            if($size <= 8097152 && $size > 0){
+            if($size <= 2*1024*1024 && $size > 0){
                 if(count($files)>0) {
                     foreach($files as $kk){$temp_filename = $kk;}
                 }
-                if(move_uploaded_file ( ($_FILES["images"]["tmp_name"]), ("img/".$filename))) {
+
+                if(move_uploaded_file ( ($_FILES["images"]["tmp_name"]), ("img".DIRECTORY_SEPARATOR.$filename))) {
                     if($temp_filename !='')unlink($temp_filename);
-                    echo ('<img src= "img/'.$filename .'" alt="" onclick = "$(\'#images\').click();"} />');
+                    echo ('<img src= "img'.DIRECTORY_SEPARATOR.$filename .'" alt="" onclick = "$(\'#images\').click();"} />');
                     return;
                 }
                 else{
-                    echo ('<img src= "img/'.$temp_filename .'" alt="" onclick = "$(\'#images\').click();"} />');
+                    echo ('<img src= "'.$temp_filename .'" alt="" onclick = "$(\'#images\').click();"} />');
                     return;
                 }
             }
