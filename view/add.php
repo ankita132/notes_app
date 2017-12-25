@@ -5,14 +5,15 @@ if(!logged_in())("Location: login.php");
 
 $name = $_SESSION['username'];
 
-if(isset($_POST['note'])){
+if(isset($_POST['note']) && isset($_POST['genre'])){
 
     $note = mysqli_real_escape_string($con, $_POST['note']);
-    $insertQuery = "INSERT INTO notes(note, name) VALUES ('$note', '$name')";
+    $genre = mysqli_real_escape_string($con, $_POST['genre']);
+    $insertQuery = "INSERT INTO notes(note, name,genre) VALUES ('$note', '$name','$genre')";
 
     if(isset($_POST['id'])){
         $id = $_POST['id'];
-        $insertQuery = "UPDATE notes SET note ='$note' WHERE id = '$id'";
+        $insertQuery = "UPDATE notes SET note ='$note',genre = '$genre' WHERE id = '$id'";
     }
     if(mysqli_query($con, $insertQuery))
     {
@@ -23,7 +24,7 @@ if(isset($_POST['note'])){
         $error = "Cannot add note!!";
     }
 }
-$sqlresult = mysqli_query($con, "SELECT * FROM notes WHERE name='$name'") or die ("Unable to query notes");
+$sqlresult = mysqli_query($con, "SELECT * FROM notes WHERE name='$name' ORDER BY genre") or die ("Unable to query notes");
 
 while($Row = mysqli_fetch_array($sqlresult)){
 	$id = $Row['id'];
