@@ -30,6 +30,19 @@ function profile_image_show(){
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 	<script>
+		$(document).ready(function(){
+			// $('#genre').on("change",function (event){
+			$(document).on('click','#genre',function(){
+				var genre = $('#genre').val();
+				// console.log(genre);
+				if(genre == 'new-genre'){
+					$('#add-new-genre').html('<input id="new-genre" type="text" placeholder="Enter genre here.." name="genre" class="add" maxlength="255" ><br>');
+				}
+				else{
+					$('#add-new-genre').html('');
+				}
+			});
+		});
 		$(document).ready(function() {
 			var len = 0;
 			var maxchar = 255;
@@ -59,6 +72,7 @@ function profile_image_show(){
 			});
 		}
 		function edit(id){
+			// console.log(document.getElementById('genre'));
 			$.ajax({
 				type:'GET',
 				url : 'edit.php',
@@ -108,27 +122,25 @@ function profile_image_show(){
 							window.alert('Please add a genre');
 							// return;
 						}
-						// var options = document.getElementById('genre').getElementsByTagName('option');
-						// console.log(options);
-						// options.insertBefore(options.length) = new Option('Foo', 'foo', true, true);
-						// genre.options.add(new Option(genre,genre),  document.getElementById('genre').getElementsByTagName('option').length - 1);
-						$('#genre').append('<option selected="selected" value='+genre+'>'+genre+'</option>');
-						$('#add-new-genre').html('');
+						// $('#genre').append('<option selected="selected" value='+genre+'>'+genre+'</option>');
+						// $('#add-new-genre').html('');
 				}
-				// var options = document.getElementById('genre').getElementsByTagName('option');
-				// var i;
-			 	// var flag = true;
-				// for (i = 0; i < options.length; i++) {
-		  //   			// console.log(options[i].getAttribute('value'));
-		  //   			if(options[i].getAttribute('value') == genre){
-		  //   				flag = false;
-		  //   			}
-				// 	}
+				var options = document.getElementById('genre').getElementsByTagName('option');
+				var i;
+			 	var flag = true;
+				for (i = 0; i < options.length; i++) {
+		    			// console.log(options[i].getAttribute('value'));
+		    			if(options[i].getAttribute('value') == genre){
+		    				//options[i].setAttribute('selected', 'selected');
+		    				$('#genre').val(genre);
+		    				flag = false;
+		    			}
+					}
 				
-				// if(flag){
-				// 	$('#genre').append('<option selected="selected" value='+genre+'>'+genre+'</option>');
-				// 	$('#add-new-genre').html('');
-				// }
+				if(flag){
+					$('#genre').append('<option selected="selected" value='+genre+'>'+genre+'</option>');
+				}
+				$('#add-new-genre').html('');
 				var id  = $('#note-id').val();
 				// console.log(note+' '+genre+' '+id);
 				if(note!=''){
@@ -190,19 +202,8 @@ function profile_image_show(){
 				}
 			});
 		});
-		$(document).ready(function(){
-			$('#genre').on("change",function (event){
-				var genre = $('#genre').val();
-				if(genre == 'new-genre'){
-					// console.log(genre);
-					$('#add-new-genre').html('<input id="new-genre" type="text" placeholder="Enter genre here.." name="genre" class="add" maxlength="255" ><br>');
-				}
-				else
-				{
-					$('#add-new-genre').html('');
-				}
-			});
-		});
+
+		
 	</script>
 </head>
 <body>

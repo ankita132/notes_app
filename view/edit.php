@@ -21,7 +21,7 @@ echo '
                             echo "<option value='".$Row['genre']."'>".$Row['genre']."</option>";    
                     }
                     echo'
-                    <option value="new-genre">Add New</option>";
+                    <option value="new-genre">Add New</option>
                 </select>
 
                 <div class="wrap">
@@ -32,6 +32,7 @@ echo '
                     <br/>
                     <!-- <div class="bg"></div> -->
                 </div>
+                <br>
                 <input id="add-note" type="submit"  class="btn"  name="submit" value="edit-note" />
 
 ';
