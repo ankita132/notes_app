@@ -15,16 +15,22 @@ if(isset($_POST['note']) && isset($_POST['genre'])){
         $id = $_POST['id'];
         $insertQuery = "UPDATE notes SET note ='$note',genre = '$genre' WHERE id = '$id'";
     }
-    if(mysqli_query($con, $insertQuery))
-    {
+    if(mysqli_query($con, $insertQuery)){
         $error = "Note added";
     }
-    else
-    {
+    else{
         $error = "Cannot add note!!";
     }
 }
-$sqlresult = mysqli_query($con, "SELECT * FROM notes WHERE name='$name' ORDER BY genre") or die ("Unable to query notes");
+
+$query = "SELECT * FROM notes WHERE name='$name' ORDER BY note";
+
+if(isset($_POST['sortby']) && $_POST['sortby']!='All'){
+  $sortby = mysqli_real_escape_string($con, $_POST['sortby']);
+  $query = "SELECT * FROM notes WHERE name='$name' and genre = '$sortby' ORDER BY note";
+
+}
+$sqlresult = mysqli_query($con, $query) or die ("Unable to query notes");
 
 while($Row = mysqli_fetch_array($sqlresult)){
 	$id = $Row['id'];

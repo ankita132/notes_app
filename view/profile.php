@@ -61,11 +61,27 @@ function profile_image_show(){
 			})
 		});
 
+		$(document).ready(function(){
+			$(document).on('click','#sortby-genre',function(){
+				var sortby = $('#sortby-genre').val();
+				// console.log(sortby);
+				$.ajax({
+					type:'POST',
+					url : 'remove.php',
+					data :{'genre':sortby},
+					success : function(data){
+						$("#show-notes").html(data);
+					}
+				});
+			});
+		});
+
 		function remove(id){
+			var sortby = $('#sortby-genre').val();
 			$.ajax({
-				type:'GET',
+				type:'POST',
 				url : 'remove.php',
-				data :{'id':id},
+				data :{'id':id,'genre':sortby},
 				success : function(data){
 					$("#show-notes").html(data);
 				}
@@ -143,8 +159,11 @@ function profile_image_show(){
 				$('#add-new-genre').html('');
 				var id  = $('#note-id').val();
 				// console.log(note+' '+genre+' '+id);
+				var sortby = $('#sortby-genre').val();
+				// console.log(sortby);
 				if(note!=''){
 					if(id!=''){
+						/*  For Editing Notes   */
 						$.ajax({
 							type:'POST',
 							url : 'add.php',
@@ -155,10 +174,11 @@ function profile_image_show(){
 						});
 					}
 					else{
+						/* For Adding New Notes */
 						$.ajax({
 							type:'POST',
 							url : 'add.php',
-							data :{'note':note,'genre':genre},
+							data :{'note':note,'genre':genre,'sortby':sortby},
 							success : function(data){
 								$("#show-notes").html(data);
 							}
@@ -240,7 +260,7 @@ function profile_image_show(){
 		<div class="box footer">
 			<div id="add-edit">	
 				<input id="note-id" hidden value="">	
-				<select  id='genre' name="genre" class='form-control'>		
+				<select  id='genre' name="genre" class='form-control' style="background-color: #cbe07d">		
 					<?php
 					$name  = $_SESSION['username'];
 					$sqlresult = mysqli_query($con, "SELECT distinct(genre) FROM notes WHERE name = '$name'") or die ("Unable to query genre notes");
@@ -291,13 +311,25 @@ function profile_image_show(){
 			<div class="tabs clearfix">
 				<a href="#">Your Notes</a>
 			</div>
+				<select id = 'sortby-genre' name="Sort By" class = "form-control" style="background-color: #e2b883">
+					<option value = 'All' >All</option>
+					<?php
+					$name  = $_SESSION['username'];
+					$sqlresult = mysqli_query($con, "SELECT distinct(genre) FROM notes WHERE name = '$name'") or die ("Unable to query genre notes");
+					while($Row = mysqli_fetch_array($sqlresult)){
+						echo "<option value='".$Row['genre']."'>".$Row['genre']."</option>";	
+					}
+					?>
+				</select>
+			
 			<div class="tabs-content">
 				<div class="friend-list">
 					<div class="list-ul">
 						<div id="show-notes">
 							<?php
 							$name = $_SESSION['username'];
-							$sqlresult = mysqli_query($con, "SELECT * FROM notes WHERE name='$name'");
+							$genre = 'general';
+							$sqlresult = mysqli_query($con, "SELECT * FROM notes WHERE name='$name' ORDER BY note");
 
 							while($Row = mysqli_fetch_array($sqlresult)){
 								$id = $Row['id'];
