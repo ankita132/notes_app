@@ -11,7 +11,7 @@ $note = $res['note'];
 
 echo '
         <input id="note-id" hidden value="'.$id.'">   
-                <select  id="genre" name="genre" class="form-control">';
+                <select  id="genre" name="genre" class="form-control" style="background-color: #cbe07d">';
                     $name  = $_SESSION['username'];
                     $sqlresult = mysqli_query($con, "SELECT distinct(genre) FROM notes WHERE name = '$name'") or die ("Unable to query genre notes");
                     while($Row = mysqli_fetch_array($sqlresult)){

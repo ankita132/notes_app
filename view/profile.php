@@ -31,10 +31,8 @@ function profile_image_show(){
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 	<script>
 		$(document).ready(function(){
-			// $('#genre').on("change",function (event){
 			$(document).on('click','#genre',function(){
 				var genre = $('#genre').val();
-				// console.log(genre);
 				if(genre == 'new-genre'){
 					$('#add-new-genre').html('<input id="new-genre" type="text" placeholder="Enter genre here.." name="genre" class="add" maxlength="255" ><br>');
 				}
@@ -64,7 +62,6 @@ function profile_image_show(){
 		$(document).ready(function(){
 			$(document).on('click','#sortby-genre',function(){
 				var sortby = $('#sortby-genre').val();
-				// console.log(sortby);
 				$.ajax({
 					type:'POST',
 					url : 'remove.php',
@@ -88,7 +85,6 @@ function profile_image_show(){
 			});
 		}
 		function edit(id){
-			// console.log(document.getElementById('genre'));
 			$.ajax({
 				type:'GET',
 				url : 'edit.php',
@@ -132,22 +128,17 @@ function profile_image_show(){
 				var genre = $('#genre').val();
 				if(genre == 'new-genre'){
 					genre = $('#new-genre').val();
-						if(genre == ''){
-							genre = 'general';
-							// console.log('Please add a genre');
-							window.alert('Please add a genre');
+				}
+				if(genre == '' || genre == undefined){
+					genre = 'general';
+					window.alert('You can add a genre if you like. I won\'t mind.');
 							// return;
-						}
-						// $('#genre').append('<option selected="selected" value='+genre+'>'+genre+'</option>');
-						// $('#add-new-genre').html('');
 				}
 				var options = document.getElementById('genre').getElementsByTagName('option');
 				var i;
 			 	var flag = true;
 				for (i = 0; i < options.length; i++) {
-		    			// console.log(options[i].getAttribute('value'));
 		    			if(options[i].getAttribute('value') == genre){
-		    				//options[i].setAttribute('selected', 'selected');
 		    				$('#genre').val(genre);
 		    				flag = false;
 		    			}
@@ -155,19 +146,18 @@ function profile_image_show(){
 				
 				if(flag){
 					$('#genre').append('<option selected="selected" value='+genre+'>'+genre+'</option>');
+					$('#sortby-genre').append('<option selected="selected" value='+genre+'>'+genre+'</option>');
 				}
 				$('#add-new-genre').html('');
 				var id  = $('#note-id').val();
-				// console.log(note+' '+genre+' '+id);
 				var sortby = $('#sortby-genre').val();
-				// console.log(sortby);
 				if(note!=''){
 					if(id!=''){
 						/*  For Editing Notes   */
 						$.ajax({
 							type:'POST',
 							url : 'add.php',
-							data :{'note':note,'id':id,'genre':genre},
+							data :{'note':note,'id':id,'genre':genre,'sortby':sortby},
 							success : function(data){
 								$("#show-notes").html(data);
 							}
@@ -193,6 +183,7 @@ function profile_image_show(){
 				$("#add-note").val('add-note');
 			});
 		});
+
 		$(document).ready(function(){
 			$('#images').on("change",function (event){
 				var form = document.querySelector('form');
