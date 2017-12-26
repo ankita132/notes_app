@@ -140,7 +140,7 @@ img {
   left: 0;
   position: absolute;
   text-align: center;
-  top: 350px;
+  top: 320px;
   width: inherit;
 }
 
@@ -149,7 +149,7 @@ img {
   display: inline-block;
   /*  centering  */
   position: absolute;
-  top: 35%;
+  top: 43%;
   left: 50%;
   margin-right: 50%;
   transform: translate(-50%, -50%);

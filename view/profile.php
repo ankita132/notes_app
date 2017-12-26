@@ -30,6 +30,17 @@ function profile_image_show(){
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 	<script>
+		$(document).ready(function(){
+			$(document).on('click','#genre',function(){
+				var genre = $('#genre').val();
+				if(genre == 'new-genre'){
+					$('#add-new-genre').html('<input id="new-genre" type="text" placeholder="Enter genre here.." name="genre" class="add" maxlength="255" ><br>');
+				}
+				else{
+					$('#add-new-genre').html('');
+				}
+			});
+		});
 		$(document).ready(function() {
 			var len = 0;
 			var maxchar = 255;
@@ -48,11 +59,26 @@ function profile_image_show(){
 			})
 		});
 
+		$(document).ready(function(){
+			$(document).on('click','#sortby-genre',function(){
+				var sortby = $('#sortby-genre').val();
+				$.ajax({
+					type:'POST',
+					url : 'remove.php',
+					data :{'genre':sortby},
+					success : function(data){
+						$("#show-notes").html(data);
+					}
+				});
+			});
+		});
+
 		function remove(id){
+			var sortby = $('#sortby-genre').val();
 			$.ajax({
-				type:'GET',
+				type:'POST',
 				url : 'remove.php',
-				data :{'id':id},
+				data :{'id':id,'genre':sortby},
 				success : function(data){
 					$("#show-notes").html(data);
 				}
@@ -99,24 +125,50 @@ function profile_image_show(){
 		$(document).ready(function(){
 			$(document).on('click','#add-note',function(){
 				var note = $('#new-note').val();
+				var genre = $('#genre').val();
+				if(genre == 'new-genre'){
+					genre = $('#new-genre').val();
+				}
+				if(genre == '' || genre == undefined){
+					genre = 'general';
+					window.alert('You can add a genre if you like. I won\'t mind.');
+							// return;
+				}
+				var options = document.getElementById('genre').getElementsByTagName('option');
+				var i;
+			 	var flag = true;
+				for (i = 0; i < options.length; i++) {
+		    			if(options[i].getAttribute('value') == genre){
+		    				$('#genre').val(genre);
+		    				flag = false;
+		    			}
+					}
+				
+				if(flag){
+					$('#genre').append('<option selected="selected" value='+genre+'>'+genre+'</option>');
+					$('#sortby-genre').append('<option selected="selected" value='+genre+'>'+genre+'</option>');
+				}
+				$('#add-new-genre').html('');
 				var id  = $('#note-id').val();
-
+				var sortby = $('#sortby-genre').val();
 				if(note!=''){
 					if(id!=''){
+						/*  For Editing Notes   */
 						$.ajax({
 							type:'POST',
 							url : 'add.php',
-							data :{'note':note,'id':id},
+							data :{'note':note,'id':id,'genre':genre,'sortby':sortby},
 							success : function(data){
 								$("#show-notes").html(data);
 							}
 						});
 					}
 					else{
+						/* For Adding New Notes */
 						$.ajax({
 							type:'POST',
 							url : 'add.php',
-							data :{'note':note},
+							data :{'note':note,'genre':genre,'sortby':sortby},
 							success : function(data){
 								$("#show-notes").html(data);
 							}
@@ -131,6 +183,7 @@ function profile_image_show(){
 				$("#add-note").val('add-note');
 			});
 		});
+
 		$(document).ready(function(){
 			$('#images').on("change",function (event){
 				var form = document.querySelector('form');
@@ -160,6 +213,7 @@ function profile_image_show(){
 				}
 			});
 		});
+
 		
 	</script>
 </head>
@@ -179,6 +233,7 @@ function profile_image_show(){
 			</ul>
 		</div>
 	</nav>
+
 	<div class="window">
 		<div class="overlay"></div>
 		<div class="box header">
@@ -194,70 +249,96 @@ function profile_image_show(){
 			<h4><?php echo  "@".$_SESSION['username']; ?></h4>
 		</div>
 		<div class="box footer">
-			<!-- <form method="POST" action="add.php"> -->
-				<div id="add-edit">
-					<div class="wrap">
-						<input id="new-note" type="text" placeholder="Enter note here.." name="note" class="add" maxlength="255" ><span id='remainingC'></span>
-						<br/><br/>
-						<div class="bg"></div>
-					</div>
-					<input id="note-id" hidden value="">
-					<input id="add-note" type="submit"  class="btn"  name="submit" value="add-note" />
+			<div id="add-edit">	
+				<input id="note-id" hidden value="">	
+				<select  id='genre' name="genre" class='form-control' style="background-color: #cbe07d">		
+					<?php
+					$name  = $_SESSION['username'];
+					$sqlresult = mysqli_query($con, "SELECT distinct(genre) FROM notes WHERE name = '$name'") or die ("Unable to query genre notes");
+					while($Row = mysqli_fetch_array($sqlresult)){
+						echo "<option value='".$Row['genre']."'>".$Row['genre']."</option>";	
+					}
+					?>
+					<option value='new-genre'>Add New</option>
+				</select>
+
+				<div class="wrap">
+					<span id = 'add-new-genre'></span>
+					<br/>
+					<input id="new-note" type="text" placeholder="Enter note here.." name="note" class="add" maxlength="255" >
+					<span id='remainingC'></span>
+					<br/>
+					<!-- <div class="bg"></div> -->
 				</div>
-				<!-- </form> -->
+				<br>
+				<input id="add-note" type="submit"  class="btn"  name="submit" value="add-note" />
 			</div>
 		</div>
+	</div>
 
-		<div class="material-wrap">
-			<div class="material clearfix">
-				<div class="top-bar">
-					<div class="pull-left">
-						<a href="#" class="menu-tgl pull-left"><i class="fa fa-bars"></i></a>
-					</div>
-					<span class="title">Notes</span>
-					<div class="pull-right">
-						<input type="text" placeholder="Search Notes..." class="col-md-8" id="search-box">
-						<a href="#" class="search-tgl" onclick="mySearch()"><i class="fa fa-search"></i></a>
-						<a href="#" onclick="resetSearch()" class="option-tgl"><i class="fa fa-refresh"></i></a>
-					</div>
-				</div>
-				<div class="profile">
-					<div class="cover">
-						<span class="vec vec_a"></span>
-						<span class="vec vec_b"></span>
-						<span class="vec vec_c"></span>
-						<span class="vec vec_d"></span>
-						<span class="vec vec_e"></span>
-					</div>
-				</div>
-				<div class="tabs clearfix">
-					<a href="#">Your Notes</a>
-				</div>
-				<div class="tabs-content">
-					<div class="friend-list">
-						<div class="list-ul">
-							<div id="show-notes">
-								<?php
-								$name = $_SESSION['username'];
-								$sqlresult = mysqli_query($con, "SELECT * FROM notes WHERE name='$name'");
 
-								while($Row = mysqli_fetch_array($sqlresult)){
-									$id = $Row['id'];
-									echo "<div class='list-li clearfix'>
-									<div class='info pull-left'>
-									<div class='name'>".$Row['note']."</div>
-									</div> ";
-									echo '<div class="action pull-right"><a id="edit_note"  onclick="edit(\''.$Row['id'].'\')"><i class="fa fa-edit"></i></a>';
-									echo '<a id="remove_note" onclick="remove(\''.$Row['id'].'\')"><i class="fa fa-trash-o"></i></a></div></div>';
+	<div class="material-wrap">
+		<div class="material clearfix">
+			<div class="top-bar">
+				<div class="pull-left">
+					<a href="#" class="menu-tgl pull-left"><i class="fa fa-bars"></i></a>
+				</div>
+				<span class="title">Notes</span>
+				<div class="pull-right">
+					<input type="text" placeholder="Search Notes..." class="col-md-8" id="search-box">
+					<a href="#" class="search-tgl" onclick="mySearch()"><i class="fa fa-search"></i></a>
+					<a href="#" onclick="resetSearch()" class="option-tgl"><i class="fa fa-refresh"></i></a>
+				</div>
+			</div>
+			<div class="profile">
+				<div class="cover">
+					<span class="vec vec_a"></span>
+					<span class="vec vec_b"></span>
+					<span class="vec vec_c"></span>
+					<span class="vec vec_d"></span>
+					<span class="vec vec_e"></span>
+				</div>
+			</div>
+			<div class="tabs clearfix">
+				<a href="#">Your Notes</a>
+			</div>
+				<select id = 'sortby-genre' name="Sort By" class = "form-control" style="background-color: #e2b883">
+					<option value = 'All' >All</option>
+					<?php
+					$name  = $_SESSION['username'];
+					$sqlresult = mysqli_query($con, "SELECT distinct(genre) FROM notes WHERE name = '$name'") or die ("Unable to query genre notes");
+					while($Row = mysqli_fetch_array($sqlresult)){
+						echo "<option value='".$Row['genre']."'>".$Row['genre']."</option>";	
+					}
+					?>
+				</select>
+			
+			<div class="tabs-content">
+				<div class="friend-list">
+					<div class="list-ul">
+						<div id="show-notes">
+							<?php
+							$name = $_SESSION['username'];
+							$genre = 'general';
+							$sqlresult = mysqli_query($con, "SELECT * FROM notes WHERE name='$name' ORDER BY note");
 
-								}
-								?>
-							</div>
+							while($Row = mysqli_fetch_array($sqlresult)){
+								$id = $Row['id'];
+								echo "<div class='list-li clearfix'>
+								<div class='info pull-left'>
+								<div class='name'>".$Row['note']."</div>
+								</div> ";
+								echo '<div class="action pull-right"><a id="edit_note"  onclick="edit(\''.$Row['id'].'\')"><i class="fa fa-edit"></i></a>';
+								echo '<a id="remove_note" onclick="remove(\''.$Row['id'].'\')"><i class="fa fa-trash-o"></i></a></div></div>';
+
+							}
+							?>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
+	</div>
 
-	</body>
-	</html>
+</body>
+</html>

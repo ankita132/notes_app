@@ -31,7 +31,8 @@ SET time_zone = "+00:00";
 CREATE TABLE `notes` (
   `id` int(11) NOT NULL,
   `note` varchar(255) NOT NULL,
-  `name` varchar(255) NOT NULL
+  `name` varchar(255) NOT NULL,
+  `genre` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
