@@ -37,7 +37,7 @@ while($Row = mysqli_fetch_array($sqlresult)){
 	$id = $Row['id'];
 	echo "<div class='list-li clearfix'>
           <div class='info pull-left'>
-            <div class='name'>".$Row['note']."</div>
+            <div class='name'>".$Row['note']." TAGGED FOR :: ".$Row['date']."</div>
           </div><p class=text-primary><br>|| Last Moditfied on: ";
 															echo $Row['modtime'];
           													echo '</p><div class="action pull-right">
@@ -62,7 +62,7 @@ while($Row = mysqli_fetch_array($sqlresult)){
 	$id = $Row['id'];
 	echo "<div class='list-li clearfix'>
           <div class='info pull-left'>
-            <div class='name'>".$Row['note']."</div>
+            <div class='name'>".$Row['note']." TAGGED FOR :: ".$Row['date']."</div>
           </div><p class=text-primary><br>|| Last Moditfied on: ";
 															echo $Row['modtime'];
           													echo '<div class="action pull-right">

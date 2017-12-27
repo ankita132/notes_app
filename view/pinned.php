@@ -20,7 +20,7 @@ $sqlresult = mysqli_query($con, "SELECT * FROM notes WHERE name='$name' and pin=
 									$id = $Row['id'];
 									echo "<div class='list-li clearfix'>
 									<div class='info pull-left'>
-									<div class='name'>".$Row['note']."</div>
+									<div class='name'>".$Row['note']." TAGGED FOR :: ".$Row['date']."</div>
 									</div><p class=text-primary><br>|| Last Moditfied on: ";
 															echo $Row['modtime'];
           													echo '</p><div class="action pull-right"><a id="edit_note"  onclick="edit(\''.$Row['id'].'\')"><i class="fa fa-edit"></i></a>';
@@ -36,7 +36,7 @@ $sqlresult = mysqli_query($con, "SELECT * FROM notes WHERE name='$name' and pin=
 									$id = $Row['id'];
 									echo "<div class='list-li clearfix'>
 									<div class='info pull-left'>
-									<div class='name'>".$Row['note']."</div>
+									<div class='name'>".$Row['note']." TAGGED FOR :: ".$Row['date']."</div>
 									</div><p class=text-primary><br>|| Last Moditfied on: ";
 															echo $Row['modtime'];
           													echo '</p><div class="action pull-right"><a id="edit_note"  onclick="edit(\''.$Row['id'].'\')"><i class="fa fa-edit"></i></a>';
