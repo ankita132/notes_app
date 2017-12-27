@@ -142,6 +142,7 @@ function profile_image_show(){
 		$(document).ready(function(){
 			$(document).on('click','#add-note',function(){
 				var note = $('#new-note').val();
+				var date = $('#datepicker').val();
 				var genre = $('#genre').val();
 				if(genre == 'new-genre'){
 					genre = $('#new-genre').val();
@@ -174,7 +175,7 @@ function profile_image_show(){
 						$.ajax({
 							type:'POST',
 							url : 'add.php',
-							data :{'note':note,'id':id,'genre':genre,'sortby':sortby},
+							data :{'note':note,'id':id,'genre':genre,'sortby':sortby,'date':date},
 							success : function(data){
 								$("#show-notes").html(data);
 							}
@@ -185,7 +186,7 @@ function profile_image_show(){
 						$.ajax({
 							type:'POST',
 							url : 'add.php',
-							data :{'note':note,'genre':genre,'sortby':sortby},
+							data :{'note':note,'genre':genre,'sortby':sortby,'date':date},
 							success : function(data){
 								$("#show-notes").html(data);
 							}
@@ -284,7 +285,7 @@ function profile_image_show(){
 					<br/>
 					<input id="new-note" type="text" placeholder="Enter note here.." name="note" class="add" maxlength="255" >
 					<span id='remainingC'></span><br/>
-					<br/><input id="datepicker" type="text" placeholder="To be notified on.." name="date" readonly="readonly" value=<?php echo date("m/d/Y");?> />
+					<br/><input id="datepicker" type="text" placeholder="To be notified on.." name="date"/>
 					<br/>
 					<!-- <div class="bg"></div> -->
 				</div>
@@ -346,8 +347,9 @@ function profile_image_show(){
 															echo "<div class='list-li clearfix'>
 															<div class='info pull-left'>
 															<div class='name'>".$Row['note']."</div>
-															</div> ";
-															echo '<div class="action pull-right"><a id="edit_note"  onclick="edit(\''.$Row['id'].'\')"><i class="fa fa-edit"></i></a>';
+															</div><p class=text-primary><br>|| Last Moditfied on: ";
+															echo $Row['modtime'];
+          													echo '</p><div class="action pull-right"><a id="edit_note"  onclick="edit(\''.$Row['id'].'\')"><i class="fa fa-edit"></i></a>';
 															echo '<a id="pinned_note" onclick="pinned(\''.$Row['id'].'\')"><i class="fa fa-star"></i></a>';
 															echo '<a id="remove_note" onclick="remove(\''.$Row['id'].'\')"><i class="fa fa-trash-o"></i></a></div></div>';
 
@@ -360,8 +362,9 @@ function profile_image_show(){
 								echo "<div class='list-li clearfix'>
 								<div class='info pull-left'>
 								<div class='name'>".$Row['note']."</div>
-								</div> ";
-								echo '<div class="action pull-right"><a id="edit_note"  onclick="edit(\''.$Row['id'].'\')"><i class="fa fa-edit"></i></a>';
+								</div><p class=text-primary><br>|| Last Moditfied on: ";
+															echo $Row['modtime'];
+          													echo '</p><div class="action pull-right"><a id="edit_note"  onclick="edit(\''.$Row['id'].'\')"><i class="fa fa-edit"></i></a>';
 								echo '<a id="pinned_note" onclick="pinned(\''.$Row['id'].'\')"><i class="fa fa-star-o"></i></a>';
 								echo '<a id="remove_note" onclick="remove(\''.$Row['id'].'\')"><i class="fa fa-trash-o"></i></a></div></div>';
 

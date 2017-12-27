@@ -22,10 +22,11 @@ if(!logged_in())("Location: login.php");
    echo "<div class='list-li clearfix'>
    <div class='info pull-left'>
    <div class='name'>".$Row['note']."</div>
-   </div> ";
-   echo '<div class="action pull-right">
+   </div><p class=text-primary><br>|| Last Moditfied on: ";
+															echo $Row['modtime'];
+          													echo '</p><div class="action pull-right">
    <a id="edit_note" onclick="edit(\''.$Row['id'].'\')"><i class="fa fa-edit"></i></a>';
-   	echo '<a id="pinned_note" onclick="pinned(\''.$Row['id'].'\')"><i class="fa fa-star"></i></a>';
+   echo '<a id="pinned_note" onclick="pinned(\''.$Row['id'].'\')"><i class="fa fa-star"></i></a>';
    echo '<a id="remove_note" onclick="remove(\''.$Row['id'].'\')"><i class="fa fa-trash-o"></i></a>
    </div>
    </div>';
@@ -43,11 +44,12 @@ if(!logged_in())("Location: login.php");
     echo "<div class='list-li clearfix'>
     <div class='info pull-left'>
     <div class='name'>".$Row['note']."</div>
-    </div> ";
-    echo '<div class="action pull-right">
+    </div><p class=text-primary><br>|| Last Moditfied on: ";
+															echo $Row['modtime'];
+          													echo '</p><div class="action pull-right">
     <a id="edit_note" onclick="edit(\''.$Row['id'].'\')"><i class="fa fa-edit"></i></a>';
   	echo '<a id="pinned_note" onclick="pinned(\''.$Row['id'].'\')"><i class="fa fa-star-o"></i></a>';
- echo '<a id="remove_note" onclick="remove(\''.$Row['id'].'\')"><i class="fa fa-trash-o"></i></a>
+    echo '<a id="remove_note" onclick="remove(\''.$Row['id'].'\')"><i class="fa fa-trash-o"></i></a>
     </div>
     </div>';
   }

@@ -21,9 +21,9 @@ $sqlresult = mysqli_query($con, "SELECT * FROM notes WHERE name='$name' and pin=
 									echo "<div class='list-li clearfix'>
 									<div class='info pull-left'>
 									<div class='name'>".$Row['note']."</div>
-									</div>";
-
-									echo '<div class="action pull-right"><a id="edit_note"  onclick="edit(\''.$Row['id'].'\')"><i class="fa fa-edit"></i></a>';
+									</div><p class=text-primary><br>|| Last Moditfied on: ";
+															echo $Row['modtime'];
+          													echo '</p><div class="action pull-right"><a id="edit_note"  onclick="edit(\''.$Row['id'].'\')"><i class="fa fa-edit"></i></a>';
 									echo '<a id="pinned_note" onclick="pinned(\''.$Row['id'].'\')"><i class="fa fa-star"></i></a>';
 									echo '<a id="remove_note" onclick="remove(\''.$Row['id'].'\')"><i class="fa fa-trash-o"></i></a></div></div>';
 
@@ -37,8 +37,9 @@ $sqlresult = mysqli_query($con, "SELECT * FROM notes WHERE name='$name' and pin=
 									echo "<div class='list-li clearfix'>
 									<div class='info pull-left'>
 									<div class='name'>".$Row['note']."</div>
-									</div>";
-									echo '<div class="action pull-right"><a id="edit_note"  onclick="edit(\''.$Row['id'].'\')"><i class="fa fa-edit"></i></a>';
+									</div><p class=text-primary><br>|| Last Moditfied on: ";
+															echo $Row['modtime'];
+          													echo '</p><div class="action pull-right"><a id="edit_note"  onclick="edit(\''.$Row['id'].'\')"><i class="fa fa-edit"></i></a>';
 									echo '<a id="pinned_note" onclick="pinned(\''.$Row['id'].'\')"><i class="fa fa-star-o"></i></a>';
 									echo '<a id="remove_note" onclick="remove(\''.$Row['id'].'\')"><i class="fa fa-trash-o"></i></a></div></div>';
 
@@ -46,5 +47,3 @@ $sqlresult = mysqli_query($con, "SELECT * FROM notes WHERE name='$name' and pin=
 								}
 
 ?>
-
-
