@@ -10,7 +10,7 @@ $res = mysqli_fetch_array($sqlresult);
 $note = $res['note'];
 
 echo '
-        <input id="note-id" hidden value="'.$id.'">   
+        <input id="note-id" hidden value="'.$id.'">
                 <select  id="genre" name="genre" class="form-control" style="background-color: #cbe07d">';
                     $name  = $_SESSION['username'];
                     $sqlresult = mysqli_query($con, "SELECT distinct(genre) FROM notes WHERE name = '$name'") or die ("Unable to query genre notes");
@@ -18,7 +18,7 @@ echo '
                         if($Row['genre'] == $res['genre'])
                             echo "<option selected='selected' value='".$Row['genre']."'>".$Row['genre']."</option>";
                         else
-                            echo "<option value='".$Row['genre']."'>".$Row['genre']."</option>";    
+                            echo "<option value='".$Row['genre']."'>".$Row['genre']."</option>";
                     }
                     echo'
                     <option value="new-genre">Add New</option>

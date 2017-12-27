@@ -1,3 +1,3 @@
 <?php
-header('Location:http://localhost/notes_app/view/view.php');
+header('Location:http://localhost/notes_appm/view/view.php');
 ?>
