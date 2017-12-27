@@ -289,7 +289,7 @@ function profile_image_show(){
 					<br/>
 					<!-- <div class="bg"></div> -->
 				</div>
-				<br><br>
+				<br>
 				<input id="add-note" type="submit"  class="btn"  name="submit" value="add-note" />
 			</div>
 		</div>
