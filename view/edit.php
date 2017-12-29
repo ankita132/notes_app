@@ -33,7 +33,7 @@ echo '
 					<br/><input id="datepicker" type="text" placeholder="To be notified on.." value="'.$date.'" />
 					<br/><!-- <div class="bg"></div> -->
                 </div>
-
+                <br><br>
                 <input id="add-note" type="submit"  class="btn"  name="submit" value="edit-note" />
 
 ';
