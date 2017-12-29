@@ -24,12 +24,29 @@ function profile_image_show(){
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" type="text/css" href="profile.css">
 	<link rel="icon" href="icon.png" />
-
+	<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-	<script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+
+			  <script>
+
+			  $(document).ready(function() {
+			    $("#datepicker").datepicker();
+		  });
+
+		function pinned(id){
+					$.ajax({
+						type:'GET',
+						url : 'pinned.php',
+						data :{'id':id},
+						success : function(data){
+							$("#show-notes").html(data);
+						}
+					});
+		}
 		$(document).ready(function(){
 			$(document).on('click','#genre',function(){
 				var genre = $('#genre').val();
@@ -125,6 +142,7 @@ function profile_image_show(){
 		$(document).ready(function(){
 			$(document).on('click','#add-note',function(){
 				var note = $('#new-note').val();
+				var date = $('#datepicker').val();
 				var genre = $('#genre').val();
 				if(genre == 'new-genre'){
 					genre = $('#new-genre').val();
@@ -143,7 +161,7 @@ function profile_image_show(){
 		    				flag = false;
 		    			}
 					}
-				
+
 				if(flag){
 					$('#genre').append('<option selected="selected" value='+genre+'>'+genre+'</option>');
 					$('#sortby-genre').append('<option selected="selected" value='+genre+'>'+genre+'</option>');
@@ -157,7 +175,7 @@ function profile_image_show(){
 						$.ajax({
 							type:'POST',
 							url : 'add.php',
-							data :{'note':note,'id':id,'genre':genre,'sortby':sortby},
+							data :{'note':note,'id':id,'genre':genre,'sortby':sortby,'date':date},
 							success : function(data){
 								$("#show-notes").html(data);
 							}
@@ -168,7 +186,7 @@ function profile_image_show(){
 						$.ajax({
 							type:'POST',
 							url : 'add.php',
-							data :{'note':note,'genre':genre,'sortby':sortby},
+							data :{'note':note,'genre':genre,'sortby':sortby,'date':date},
 							success : function(data){
 								$("#show-notes").html(data);
 							}
@@ -189,17 +207,17 @@ function profile_image_show(){
 				var form = document.querySelector('form');
 				var formdata =new FormData(form);
 				var file = event.target.files[0];
-				
+
 				if(!file.type.match('image/.*')){
 					window.alert( "Only Image formats are allowed.");
 					return;
 				}
 				if(file.size >= 2*1024*1024){
 					window.alert("Seems like you are trying to upload a very BIG file. ("+parseInt(file.size/1024/1024)+" mb)(File Limit : 2 mb)");
-					return;					
+					return;
 				}
-				
-				if (formdata) {	
+
+				if (formdata) {
 					$.ajax({
 						url: "upload.php",
 						type: "POST",
@@ -207,14 +225,14 @@ function profile_image_show(){
 						processData: false,
 						contentType: false,
 						success: function (res) {
-							document.getElementById("profile-image").innerHTML = res; 
+							document.getElementById("profile-image").innerHTML = res;
 						}
 					});
 				}
 			});
 		});
 
-		
+
 	</script>
 </head>
 <body>
@@ -242,21 +260,21 @@ function profile_image_show(){
 				<div id="profile-image">
 					<img src="<?php echo profile_image_show();
 					?>" alt="" onclick = "$('#images').click();"} />
-				</div>		
+				</div>
 			</form>
 
 			<h2><?php echo $_SESSION['firstname']." ".$_SESSION['lastname']; ?></h2>
 			<h4><?php echo  "@".$_SESSION['username']; ?></h4>
 		</div>
 		<div class="box footer">
-			<div id="add-edit">	
-				<input id="note-id" hidden value="">	
-				<select  id='genre' name="genre" class='form-control' style="background-color: #cbe07d">		
+			<div id="add-edit">
+				<input id="note-id" hidden value="">
+				<select  id='genre' name="genre" class='form-control' style="background-color: #cbe07d">
 					<?php
 					$name  = $_SESSION['username'];
 					$sqlresult = mysqli_query($con, "SELECT distinct(genre) FROM notes WHERE name = '$name'") or die ("Unable to query genre notes");
 					while($Row = mysqli_fetch_array($sqlresult)){
-						echo "<option value='".$Row['genre']."'>".$Row['genre']."</option>";	
+						echo "<option value='".$Row['genre']."'>".$Row['genre']."</option>";
 					}
 					?>
 					<option value='new-genre'>Add New</option>
@@ -266,11 +284,12 @@ function profile_image_show(){
 					<span id = 'add-new-genre'></span>
 					<br/>
 					<input id="new-note" type="text" placeholder="Enter note here.." name="note" class="add" maxlength="255" >
-					<span id='remainingC'></span>
+					<span id='remainingC'></span><br/>
+					<br/><input id="datepicker" type="text" placeholder="To be notified on.." name="date"/>
 					<br/>
 					<!-- <div class="bg"></div> -->
 				</div>
-				<br>
+                               <br><br>
 				<input id="add-note" type="submit"  class="btn"  name="submit" value="add-note" />
 			</div>
 		</div>
@@ -308,11 +327,11 @@ function profile_image_show(){
 					$name  = $_SESSION['username'];
 					$sqlresult = mysqli_query($con, "SELECT distinct(genre) FROM notes WHERE name = '$name'") or die ("Unable to query genre notes");
 					while($Row = mysqli_fetch_array($sqlresult)){
-						echo "<option value='".$Row['genre']."'>".$Row['genre']."</option>";	
+						echo "<option value='".$Row['genre']."'>".$Row['genre']."</option>";
 					}
 					?>
 				</select>
-			
+
 			<div class="tabs-content">
 				<div class="friend-list">
 					<div class="list-ul">
@@ -320,15 +339,33 @@ function profile_image_show(){
 							<?php
 							$name = $_SESSION['username'];
 							$genre = 'general';
-							$sqlresult = mysqli_query($con, "SELECT * FROM notes WHERE name='$name' ORDER BY note");
+
+							$sqlresult = mysqli_query($con, "SELECT * FROM notes WHERE name='$name' and pin=1 ORDER BY note");
+
+														while($Row = mysqli_fetch_array($sqlresult)){
+															$id = $Row['id'];
+															echo "<div class='list-li clearfix'>
+															<div class='info pull-left'>
+															<div class='name'>".$Row['note']." TAGGED FOR :: ".$Row['date']."</div>
+															</div><p class=text-primary><br>|| Last Moditfied on: ";
+															echo $Row['modtime'];
+          													echo '</p><div class="action pull-right"><a id="edit_note"  onclick="edit(\''.$Row['id'].'\')"><i class="fa fa-edit"></i></a>';
+															echo '<a id="pinned_note" onclick="pinned(\''.$Row['id'].'\')"><i class="fa fa-star"></i></a>';
+															echo '<a id="remove_note" onclick="remove(\''.$Row['id'].'\')"><i class="fa fa-trash-o"></i></a></div></div>';
+
+							}
+
+							$sqlresult = mysqli_query($con, "SELECT * FROM notes WHERE name='$name' and pin=0 ORDER BY note");
 
 							while($Row = mysqli_fetch_array($sqlresult)){
 								$id = $Row['id'];
 								echo "<div class='list-li clearfix'>
 								<div class='info pull-left'>
-								<div class='name'>".$Row['note']."</div>
-								</div> ";
-								echo '<div class="action pull-right"><a id="edit_note"  onclick="edit(\''.$Row['id'].'\')"><i class="fa fa-edit"></i></a>';
+								<div class='name'>".$Row['note']." TAGGED FOR :: ".$Row['date']."</div>
+								</div><p class=text-primary><br>|| Last Moditfied on: ";
+															echo $Row['modtime'];
+          													echo '</p><div class="action pull-right"><a id="edit_note"  onclick="edit(\''.$Row['id'].'\')"><i class="fa fa-edit"></i></a>';
+								echo '<a id="pinned_note" onclick="pinned(\''.$Row['id'].'\')"><i class="fa fa-star-o"></i></a>';
 								echo '<a id="remove_note" onclick="remove(\''.$Row['id'].'\')"><i class="fa fa-trash-o"></i></a></div></div>';
 
 							}
