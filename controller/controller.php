@@ -37,6 +37,11 @@ if(isset($_POST['submit']))
 				$error= "Someone is already registered with this email";
 			}
 
+			else if(check_username($username, $con))
+			{
+				$error= "Someone is already registered with this username";
+			}
+
 			else if(strlen($password) < 8)
 			{
 				$error= "Password must be greater than 8 characters";

@@ -28,4 +28,19 @@
 			}
 	}
 
+	function check_username($username, $con)
+	{
+		$result = mysqli_query($con,"SELECT * FROM usersinfo WHERE username='$username'");
+		$row = mysqli_fetch_array($result);
+
+		if(mysqli_num_rows($result) == 1)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+
+	}
 ?>
